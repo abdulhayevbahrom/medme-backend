@@ -37,7 +37,6 @@ class adminValidation {
                 },
                 experience: {
                     type: "string",
-                    minLength: 3,
                 },
                 feesPerCunsaltation: {
                     type: "number",
