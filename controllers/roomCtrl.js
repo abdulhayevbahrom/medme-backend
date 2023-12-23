@@ -1,9 +1,12 @@
 const roomModel = require("../models/roomsModel");
+const ClientModel = require("../models/clientModel");
 
 // CREATE ROOM
 const addRoomController = async (req, res) => {
   try {
-    const exisitingUser = await roomModel.findOne({ roomNumber: req.body.roomNumber });
+    const exisitingUser = await roomModel.findOne({
+      roomNumber: req.body.roomNumber,
+    });
     if (exisitingUser) {
       return res
         .status(200)
@@ -46,43 +49,62 @@ const deleteRoom = async (req, res) => {
   try {
     let deletedRoom = await roomModel.findByIdAndDelete(req.params._id);
     res.json({ success: true, message: "Deleted", data: deletedRoom });
+  } catch {
+    res.json({ state: false, msg: "Server error", innerData: null });
   }
-  catch {
-    res.json({ state: false, msg: "Server error", innerData: null })
-  }
-}
+};
 
 // UPDATE OR ADD CLIEND TO ROOM
 const updateRoom = async (req, res) => {
   try {
-    let updatedRoom = await roomModel.findByIdAndUpdate(req.params._id, req.body);
-    res.json({ success: true, message: "Bemor xonaga qo'shildi", data: updatedRoom });
+    let updatedRoom = await roomModel.findByIdAndUpdate(
+      req.params._id,
+      req.body
+    );
+    res.json({
+      success: true,
+      message: "Bemor xonaga qo'shildi",
+      data: updatedRoom,
+    });
+  } catch {
+    res.json({ state: false, msg: "Server error", innerData: null });
   }
-  catch {
-    res.json({ state: false, msg: "Server error", innerData: null })
-  }
-}
+};
 
 // delete user from room
 const deleteUserFromRoom = async (req, res) => {
-  let { clientID } = req.query
-  let { roomID } = req.query
+  let { clientID } = req.query;
+  let { roomID } = req.query;
+  let clientRoom = req.body;
 
-  let room = await roomModel.findById(roomID)
-  let capacity = room.capacity
+  let client = await ClientModel.findOne({ _id: clientRoom.id });
+  client.room = {
+    dayOfTreatment: clientRoom.dayOfTreatment,
+    payForRoom: clientRoom.payForRoom,
+  };
 
-  let removeFromCapacity = capacity.filter(i => i.phone !== clientID)
+  // update client
+  await ClientModel.findByIdAndUpdate(client._id, client);
+  // update room
+  let room = await roomModel.findById(roomID);
+  let capacity = room.capacity;
 
-  room.capacity = removeFromCapacity
+  let removeFromCapacity = capacity.filter((i) => i.phone !== clientID);
 
-  let updatedRoom = await roomModel.findByIdAndUpdate(roomID, room)
+  room.capacity = removeFromCapacity;
 
-  res.send({ success: true, message: "Bemor xonadan o'chirildi", data: updatedRoom })
-}
+  let updatedRoom = await roomModel.findByIdAndUpdate(roomID, room);
+
+  res.send({
+    success: true,
+    message: "Bemor xonadan o'chirildi",
+    data: updatedRoom,
+  });
+};
 module.exports = {
   getAllRoom,
   addRoomController,
   deleteRoom,
   updateRoom,
-  deleteUserFromRoom
+  deleteUserFromRoom,
 };

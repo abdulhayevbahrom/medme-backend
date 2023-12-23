@@ -17,17 +17,18 @@ connect(process.env.MONGO_URL)
 const Doctor = require("./routes/doctorRoutes");
 const Client = require("./routes/client");
 const Room = require("./routes/roomRoutes");
-const {dailyReports} = require('./routes/dailyReports')
+const { dailyReports } = require("./routes/dailyReports");
 
 app.use("/admin", Doctor);
 app.use("/rooms", Room);
 app.use("/client", Client);
-app.use('/dailiyReports', dailyReports )
+app.use("/dailiyReports", dailyReports);
 
 app.get("/", async (req, res) => {
   res.json("<h1>App is running</h1>");
 });
 
 const PORT = process.env.PORT || 5500;
-app.listen(PORT, () => console.log(`Server listening => http://localhost:${PORT}`.bgCyan));
-
+app.listen(PORT, () =>
+  console.log(`Server listening => http://localhost:${PORT}`.bgCyan)
+);
