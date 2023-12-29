@@ -47,6 +47,9 @@ class clientValidation {
                 day: {
                     type: "string",
                 },
+                month: {
+                    type: "string",
+                },
                 room: {
                     type: "object",
                     properties: {
