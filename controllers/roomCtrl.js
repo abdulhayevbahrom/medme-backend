@@ -77,10 +77,15 @@ const deleteUserFromRoom = async (req, res) => {
   let { roomID } = req.query;
   let clientRoom = req.body;
 
+  let time = new Date();
+  let day =
+    time.getDate() + "." + (time.getMonth() + 1) + "." + time.getFullYear();
+
   let client = await ClientModel.findOne({ _id: clientRoom.id });
   client.room = {
     dayOfTreatment: clientRoom.dayOfTreatment,
     payForRoom: clientRoom.payForRoom,
+    outDate: day,
   };
 
   // update client
