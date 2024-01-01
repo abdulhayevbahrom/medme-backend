@@ -130,17 +130,17 @@ const cleareClient = async (req, res) => {
 };
 
 // auto delete some clients
-schedule.scheduleJob("0 25 * * *", async () => {
-  try {
-    const result = await ClientModel.deleteMany({
-      payState: false,
-      paySumm: 0,
-    });
-    console.log(`${result.deletedCount} ta ma'lumot o'chirildi`);
-  } catch (error) {
-    console.error("Xatolik:", error);
-  }
-});
+// schedule.scheduleJob("0 25 * * *", async () => {
+//   try {
+//     const result = await ClientModel.deleteMany({
+//       payState: false,
+//       paySumm: 0,
+//     });
+//     console.log(`${result.deletedCount} ta ma'lumot o'chirildi`);
+//   } catch (error) {
+//     console.error("Xatolik:", error);
+//   }
+// });
 
 module.exports = {
   getAllClient,

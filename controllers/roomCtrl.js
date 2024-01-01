@@ -72,40 +72,110 @@ const updateRoom = async (req, res) => {
 };
 
 // delete user from room
+// const deleteUserFromRoom = async (req, res) => {
+//   let { clientID } = req.query;
+//   let { roomID } = req.query;
+//   let clientRoom = req.body;
+
+//   let client = await ClientModel.findOne({ _id: clientRoom.id });
+//   // client.room = {
+//   //   dayOfTreatment: clientRoom.dayOfTreatment,
+//   //   payForRoom: clientRoom.payForRoom,
+//   //   outDate: 222,
+//   // };
+//   let s = await {
+//     ...client,
+//     room: {
+//       dayOfTreatment: clientRoom.dayOfTreatment,
+//       payForRoom: clientRoom.payForRoom,
+//       outDate: 222,
+//     },
+//   };
+//   res.send(s);
+
+//   // // update client
+//   // await ClientModel.findByIdAndUpdate(client._id, client);
+//   // // update room
+//   // let room = await roomModel.findById(roomID);
+//   // let capacity = room.capacity;
+
+//   // let removeFromCapacity = capacity.filter((i) => i.phone !== clientID);
+
+//   // room.capacity = removeFromCapacity;
+
+//   // let updatedRoom = await roomModel.findByIdAndUpdate(roomID, room);
+
+//   // res.send({
+//   //   success: true,
+//   //   message: "Bemor xonadan o'chirildi",
+//   //   data: updatedRoom,
+//   // });
+// };
+
+// Zarur modelni import qiling (ClientModel va roomModel uchun)
+
+// Foydalanuvchini xonadan o'chirish
 const deleteUserFromRoom = async (req, res) => {
-  let { clientID } = req.query;
-  let { roomID } = req.query;
-  let clientRoom = req.body;
+  try {
+    const { clientID } = req.query;
+    const { roomID } = req.query;
+    const clientRoom = req.body;
 
-  let time = new Date();
-  let day =
-    time.getDate() + "." + (time.getMonth() + 1) + "." + time.getFullYear();
+    // ID bo'yicha foydalanuvchini izlash
+    const client = await ClientModel.findOne({ _id: clientRoom.id });
 
-  let client = await ClientModel.findOne({ _id: clientRoom.id });
-  client.room = {
-    dayOfTreatment: clientRoom.dayOfTreatment,
-    payForRoom: clientRoom.payForRoom,
-    outDate: day,
-  };
+    // Foydalanuvchi xonasini malumotlarini yangilash
+    await ClientModel.findByIdAndUpdate(
+      client._id,
+      {
+        room: {
+          dayOfTreatment: clientRoom.dayOfTreatment,
+          payForRoom: clientRoom.payForRoom,
+          outDate: clientRoom.outDay,
+        },
+      },
+      { new: true } // Yangilangan hujjatni qaytarish
+    );
 
-  // update client
-  await ClientModel.findByIdAndUpdate(client._id, client);
-  // update room
-  let room = await roomModel.findById(roomID);
-  let capacity = room.capacity;
+    let room = await roomModel.findById(roomID);
+    let capacity = room.capacity;
 
-  let removeFromCapacity = capacity.filter((i) => i.phone !== clientID);
+    let removeFromCapacity = capacity.filter((i) => i.phone !== clientID);
 
-  room.capacity = removeFromCapacity;
+    room.capacity = removeFromCapacity;
 
-  let updatedRoom = await roomModel.findByIdAndUpdate(roomID, room);
+    let updatedRoom = await roomModel.findByIdAndUpdate(roomID, room);
 
-  res.send({
-    success: true,
-    message: "Bemor xonadan o'chirildi",
-    data: updatedRoom,
-  });
+    res.send({
+      success: true,
+      message: "Bemor xonadan o'chirildi",
+      data: updatedRoom,
+    });
+
+    // // // Xona miqdorini yangilash (bu qismni izohlang va o'zingizning ma'lumot tuzumiga qarab tugatib bering)
+    // // const room = await roomModel.findById(roomID);
+    // // const capacity = room.capacity;
+    // // const removeFromCapacity = capacity.filter((i) => i.phone !== clientID);
+    // // room.capacity = removeFromCapacity;
+    // // const updatedRoom = await roomModel.findByIdAndUpdate(roomID, room);
+
+    // res.send({
+    //   success: true,
+    //   message: "Bemor xonadan o'chirildi",
+    //   data: updatedClient, // Yangilangan foydalanuvchi ma'lumotlarini qaytarish
+    //   // Agar yangilangan xona ma'lumotlarini ham qaytarishni istasangiz quyidagi qatorni uncomment qiling
+    //   // roomData: updatedRoom,
+    // });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({
+      success: false,
+      message: "Foydalanuvchini xonadan o'chirishda xatolik",
+      error: error.message,
+    });
+  }
 };
+
 module.exports = {
   getAllRoom,
   addRoomController,
