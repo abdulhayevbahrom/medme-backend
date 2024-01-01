@@ -48,6 +48,9 @@ const clientSchema = new Schema({
     month: {
         type: String,
     },
+    queueNumber: {
+        type: Number,
+    },
     room: {
         dayOfTreatment: {
             type: Number,
@@ -59,6 +62,9 @@ const clientSchema = new Schema({
         },
         roomNumber: {
             type: Number,
+        },
+        outDay: {
+            type: String,
         }
     }
 

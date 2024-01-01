@@ -52,7 +52,16 @@ class adminValidation {
                 docORrecep: {
                     type: "string",
                     minLength: 3,
-                }
+                },
+                checkList: {
+                    type: 'string',
+                },
+                percent: {
+                    type: 'number',
+                },
+                salary: {
+                    type: 'number',
+                },
             },
             required: ["firstName", "lastName", "phone", "email", "address", "login", "password", "docORrecep"]
         }

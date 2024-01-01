@@ -50,6 +50,9 @@ class clientValidation {
                 month: {
                     type: "string",
                 },
+                queueNumber: {
+                    type: "number",
+                },
                 room: {
                     type: "object",
                     properties: {
@@ -61,6 +64,12 @@ class clientValidation {
                         },
                         roomNumber: {
                             type: "number",
+                        },
+                        roomNumber: {
+                            type: "number",
+                        },
+                        outDay: {
+                            type: "string",
                         }
                     }
                 }
