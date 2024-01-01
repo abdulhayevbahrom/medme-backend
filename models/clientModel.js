@@ -60,7 +60,7 @@ const clientSchema = new Schema({
     roomNumber: {
       type: Number,
     },
-    outDate: {
+    outDay: {
       type: String,
       default: 0,
     },

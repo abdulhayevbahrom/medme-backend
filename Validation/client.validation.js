@@ -62,7 +62,7 @@ class clientValidation {
             roomNumber: {
               type: "number",
             },
-            outDate: {
+            outDay: {
               type: "string",
             },
           },

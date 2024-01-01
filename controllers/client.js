@@ -5,6 +5,7 @@ const schedule = require("node-schedule");
 const getAllClient = async (req, res) => {
   try {
     const allData = await ClientModel.find();
+
     if (!allData.length) {
       return res.json({
         success: false,
@@ -12,6 +13,7 @@ const getAllClient = async (req, res) => {
         data: allData,
       });
     }
+
     res.status(200).json({
       success: true,
       message: "all clients",
@@ -51,9 +53,11 @@ const getOneClient = async (req, res) => {
 };
 
 // CRATE CLIENT || NEW CLIENT
+let currentDate = new Date().toLocaleDateString();
 const newClient = async (req, res) => {
   try {
     const createProduct = new ClientModel(req.body);
+
     if (!createProduct) {
       return res.status(400).json({
         success: false,
@@ -61,6 +65,19 @@ const newClient = async (req, res) => {
         data: createProduct,
       });
     }
+    //---------------------------------------------
+    // // Queue Number Client
+    // const { queueNumber } = req.body;
+
+    // const today = new Date().toLocaleDateString();
+    // if (today !== currentDate) {
+    //   currentDate = today;
+    //   queueNumber = [];
+    // }
+    // const newQueueNumberClient = queueNumber.length + 1;
+    // queueNumber.push(newQueueNumberClient);
+    //---------------------------------------------
+
     const saveProduct = await createProduct.save();
     res.status(200).json({
       success: true,
@@ -130,17 +147,31 @@ const cleareClient = async (req, res) => {
 };
 
 // auto delete some clients
-// schedule.scheduleJob("0 25 * * *", async () => {
-//   try {
-//     const result = await ClientModel.deleteMany({
-//       payState: false,
-//       paySumm: 0,
-//     });
-//     console.log(`${result.deletedCount} ta ma'lumot o'chirildi`);
-//   } catch (error) {
-//     console.error("Xatolik:", error);
+schedule.scheduleJob("0 0 0 * * *", async () => {
+  try {
+    const result = await ClientModel.deleteMany({
+      payState: false,
+      paySumm: 0,
+    });
+  } catch (error) {
+    console.error("Xatolik:", error);
+  }
+});
+
+// const autoDelete = async (props) => {
+
+// const allData = await ClientModel.find();
+// const inactivityPeriod = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+// const currentTime = new Date().getTime();
+
+// allData?.forEach((user) => {
+//   if (currentTime - user.queueNumber > inactivityPeriod) {
+//     user.payState = false;
+//     user.paySumm = 0;
 //   }
 // });
+// };
+// setInterval(autoDelete, 60 * 60 * 1000); // Run every hour
 
 module.exports = {
   getAllClient,

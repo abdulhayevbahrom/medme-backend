@@ -49,6 +49,15 @@ const doctorSchema = new mongoose.Schema(
       type: String,
       required: [true, " or reception is require"],
     },
+    checkList: {
+      type: String,
+    },
+    percent: {
+      type: Number,
+    },
+    salary: {
+      type: Number,
+    },
   },
   { timestamps: true }
 );
