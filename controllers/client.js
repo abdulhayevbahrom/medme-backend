@@ -53,10 +53,22 @@ const getOneClient = async (req, res) => {
 };
 
 // CRATE CLIENT || NEW CLIENT
-let currentDate = new Date().toLocaleDateString();
+let time = new Date();
+let todaysTime =
+  time.getDate() + "." + (time.getMonth() + 1) + "." + time.getFullYear();
+
 const newClient = async (req, res) => {
   try {
-    const createProduct = new ClientModel(req.body);
+    let client = req.body;
+    const unActiveClients = await ClientModel.find({
+      choseDoctor: client.choseDoctor,
+      day: todaysTime,
+    });
+
+    const createProduct = new ClientModel({
+      ...req.body,
+      queueNumber: unActiveClients.length + 1,
+    });
 
     if (!createProduct) {
       return res.status(400).json({
@@ -65,18 +77,6 @@ const newClient = async (req, res) => {
         data: createProduct,
       });
     }
-    //---------------------------------------------
-    // // Queue Number Client
-    // const { queueNumber } = req.body;
-
-    // const today = new Date().toLocaleDateString();
-    // if (today !== currentDate) {
-    //   currentDate = today;
-    //   queueNumber = [];
-    // }
-    // const newQueueNumberClient = queueNumber.length + 1;
-    // queueNumber.push(newQueueNumberClient);
-    //---------------------------------------------
 
     const saveProduct = await createProduct.save();
     res.status(200).json({
