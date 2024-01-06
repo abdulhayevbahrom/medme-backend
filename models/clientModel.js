@@ -17,6 +17,14 @@ const clientSchema = new Schema({
     type: String,
     required: [true, "doctor is required"],
   },
+  address: {
+    type: String,
+    required: [true, "address is required"],
+  },
+  year: {
+    type: String,
+    required: [true, "doctor is required"],
+  },
   payState: {
     type: Boolean,
     required: [true, "true or false value is required"],
@@ -29,18 +37,60 @@ const clientSchema = new Schema({
     type: String,
     required: [true, "firstname is required"],
   },
+  doctorPhone: {
+    type: String,
+  },
   doctorLastName: {
     type: String,
     required: [true, "lastname is required"],
   },
+  idNumber: {
+    type: String,
+    required: [true, "ID number is required"],
+  },
+  temperature: {
+    type: String
+  },
+  weight: {
+    type: Number
+  },
+  height: {
+    type: Number
+  },
+  diagnostics: {
+    type: String
+  },
+  urgentCheck: {
+    type: String
+  },
+  analysis: {
+    type: String
+  },
+  urgent: {
+    type: String
+  },
+
   sickname: {
     type: String,
   },
-  retsept: {
-    type: String,
-  },
+  retsept: [
+    {
+      writed_at: {
+        type: String
+      },
+      writed_doctor: {
+        type: String
+      },
+      sickname: {
+        type: String
+      },
+      retseptList: {
+        type: String
+      }
+    }
+  ],
   view: {
-    type: Boolean,
+    type: Number,
   },
   day: {
     type: String,

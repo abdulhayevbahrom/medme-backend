@@ -4,7 +4,7 @@ const schedule = require("node-schedule");
 // GET ALL CLIENT
 const getAllClient = async (req, res) => {
   try {
-    const allData = await ClientModel.find();
+    const allData = await ClientModel.find()
 
     if (!allData.length) {
       return res.json({
@@ -28,6 +28,7 @@ const getAllClient = async (req, res) => {
     });
   }
 };
+
 
 // GET ONE (1) CLIENT
 const getOneClient = async (req, res) => {
@@ -60,6 +61,7 @@ let todaysTime =
 const newClient = async (req, res) => {
   try {
     let client = req.body;
+    console.log(client);
     const unActiveClients = await ClientModel.find({
       choseDoctor: client.choseDoctor,
       day: todaysTime,
@@ -172,6 +174,14 @@ schedule.scheduleJob("0 0 0 * * *", async () => {
 // });
 // };
 // setInterval(autoDelete, 60 * 60 * 1000); // Run every hour
+
+
+
+
+
+
+
+
 
 module.exports = {
   getAllClient,

@@ -23,6 +23,12 @@ class clientValidation {
         choseDoctor: {
           type: "string",
         },
+        address: {
+          type: "string",
+        },
+        year: {
+          type: "string",
+        },
         payState: {
           type: "boolean",
         },
@@ -33,6 +39,9 @@ class clientValidation {
           type: "string",
         },
         doctorLastName: {
+          type: "string",
+        },
+        doctorPhone: {
           type: "string",
         },
         sickname: {
@@ -77,6 +86,8 @@ class clientValidation {
         "paySumm",
         "doctorFirstName",
         "doctorLastName",
+        "address",
+        "year"
       ],
     };
 
