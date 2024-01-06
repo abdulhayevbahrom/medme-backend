@@ -81,6 +81,9 @@ const clientSchema = new Schema({
       writed_doctor: {
         type: String
       },
+      patientStatus: {
+        type: String
+      },
       sickname: {
         type: String
       },
@@ -90,7 +93,7 @@ const clientSchema = new Schema({
     }
   ],
   view: {
-    type: Number,
+    type: Boolean,
   },
   day: {
     type: String,

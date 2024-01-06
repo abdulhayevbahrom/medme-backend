@@ -44,12 +44,54 @@ class clientValidation {
         doctorPhone: {
           type: "string",
         },
+        idNumber: {
+          ttype: "string",
+          required: [true, "ID number is required"],
+        },
+        temperature: {
+          type: "string",
+        },
+        weight: {
+          type: "number",
+        },
+        height: {
+          type: "number",
+        },
+        diagnostics: {
+          type: "string",
+        },
+        urgentCheck: {
+          type: "string",
+        },
+        analysis: {
+          type: "string",
+        },
+        urgent: {
+          type: "string",
+        },
+
         sickname: {
           type: "string",
         },
-        retsept: {
-          type: "string",
-        },
+        retsept: [
+          {
+            writed_at: {
+              type: "string",
+            },
+            writed_doctor: {
+              type: "string",
+            },
+            patientStatus: {
+              type: "string",
+            },
+            sickname: {
+              type: "string",
+            },
+            retseptList: {
+              type: "string",
+            }
+          }
+        ],
         view: {
           type: "boolean",
         },
@@ -86,6 +128,7 @@ class clientValidation {
         "paySumm",
         "doctorFirstName",
         "doctorLastName",
+        "idNumber",
         "address",
         "year"
       ],
