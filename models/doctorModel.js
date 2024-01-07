@@ -35,7 +35,26 @@ const doctorSchema = new mongoose.Schema(
     },
     feesPerCunsaltation: {
       type: Number,
-      // required: [false, "fee is required"],
+    },
+    analisisPrices: {
+      blood_analysis: {
+        type: Number,
+      },
+      urine_analysis: {
+        type: Number,
+      },
+      biochemical_analysis: {
+        type: Number,
+      },
+    },
+    labator: {
+      type: String,
+    },
+    diagnostica: {
+      type: String,
+    },
+    analis: {
+      type: String,
     },
     login: {
       type: String,

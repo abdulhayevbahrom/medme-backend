@@ -73,25 +73,28 @@ class clientValidation {
         sickname: {
           type: "string",
         },
-        retsept: [
-          {
-            writed_at: {
-              type: "string",
+        retsept: {
+          type: "array",
+          properties: [
+            {
+              writed_at: {
+                type: "string",
+              },
+              writed_doctor: {
+                type: "string",
+              },
+              patientStatus: {
+                type: "string",
+              },
+              sickname: {
+                type: "string",
+              },
+              retseptList: {
+                type: "string",
+              },
             },
-            writed_doctor: {
-              type: "string",
-            },
-            patientStatus: {
-              type: "string",
-            },
-            sickname: {
-              type: "string",
-            },
-            retseptList: {
-              type: "string",
-            }
-          }
-        ],
+          ],
+        },
         view: {
           type: "boolean",
         },
@@ -130,7 +133,7 @@ class clientValidation {
         "doctorLastName",
         "idNumber",
         "address",
-        "year"
+        "year",
       ],
     };
 
