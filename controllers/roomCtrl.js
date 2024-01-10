@@ -140,7 +140,7 @@ const deleteUserFromRoom = async (req, res) => {
     let room = await roomModel.findById(roomID);
     let capacity = room.capacity;
 
-    let removeFromCapacity = capacity.filter((i) => i.phone !== clientID);
+    let removeFromCapacity = capacity.filter((i) => i.idNumber !== clientID);
 
     room.capacity = removeFromCapacity;
 
