@@ -60,15 +60,7 @@ class clientValidation {
         "firstname",
         "lastname",
         "phone",
-<<<<<<< HEAD
-        "choseDoctor",
-        "payState",
-        "paySumm",
-        "doctorFirstName",
-        "doctorLastName",
-=======
         "idNumber",
->>>>>>> 5abcd169f41993eaa80e0f3e14f68a1c56dda83d
         "address",
         "year",
       ],
