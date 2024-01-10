@@ -46,7 +46,7 @@ class clientValidation {
         },
         idNumber: {
           ttype: "string",
-          required: [true, "ID number is required"],
+          // required: [true, "ID number is required"],
         },
         temperature: {
           type: "string",
@@ -131,7 +131,6 @@ class clientValidation {
         "paySumm",
         "doctorFirstName",
         "doctorLastName",
-        "idNumber",
         "address",
         "year",
       ],

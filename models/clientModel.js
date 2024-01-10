@@ -46,7 +46,7 @@ const clientSchema = new Schema({
   },
   idNumber: {
     type: String,
-    required: [true, "ID number is required"],
+    // required: [true, "ID number is required"],
   },
   temperature: {
     type: String
