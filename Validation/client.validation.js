@@ -5,119 +5,53 @@ class clientValidation {
     const schema = {
       type: "object",
       properties: {
-        firstname: {
-          type: "string",
-          minLength: 3,
-          maxLength: 20,
-        },
-        lastname: {
-          type: "string",
-          minLength: 3,
-          maxLength: 20,
-        },
-        phone: {
-          type: "string",
-          minLength: 9,
-          maxLength: 9,
-        },
-        choseDoctor: {
-          type: "string",
-        },
-        address: {
-          type: "string",
-        },
-        year: {
-          type: "string",
-        },
-        payState: {
-          type: "boolean",
-        },
-        paySumm: {
-          type: "number",
-        },
-        doctorFirstName: {
-          type: "string",
-        },
-        doctorLastName: {
-          type: "string",
-        },
-        doctorPhone: {
-          type: "string",
-        },
-        idNumber: {
-          ttype: "string",
-          // required: [true, "ID number is required"],
-        },
-        temperature: {
-          type: "string",
-        },
-        weight: {
-          type: "number",
-        },
-        height: {
-          type: "number",
-        },
-        diagnostics: {
-          type: "string",
-        },
-        urgentCheck: {
-          type: "string",
-        },
-        analysis: {
-          type: "string",
-        },
-        urgent: {
-          type: "string",
-        },
-
-        sickname: {
-          type: "string",
-        },
-        retsept: {
-          type: "array",
-          properties: [
-            {
-              writed_at: {
-                type: "string",
-              },
-              writed_doctor: {
-                type: "string",
-              },
-              patientStatus: {
-                type: "string",
-              },
-              sickname: {
-                type: "string",
-              },
-              retseptList: {
-                type: "string",
-              },
-            },
-          ],
-        },
-        view: {
-          type: "boolean",
-        },
-        day: {
-          type: "string",
-        },
-        month: {
-          type: "string",
-        },
-        room: {
+        idNumber: { type: "string" },
+        firstname: { type: "string" },
+        lastname: { type: "string" },
+        phone: { type: "string" },
+        address: { type: "string" },
+        year: { type: "string" },
+        stories: {
           type: "object",
           properties: {
-            dayOfTreatment: {
-              type: "string",
+            choseDoctor: { type: "string" },
+            payState: { type: "boolean" },
+            paySumm: { type: "number" },
+            doctorFirstName: { type: "string" },
+            doctorLastName: { type: "string" },
+            doctorPhone: { type: "string" },
+            temperature: { type: "string" },
+            weight: { type: "number" },
+            height: { type: "number" },
+            diagnostics: { type: "string" },
+            analysis: { type: "string" },
+            urgentCheck: { type: "string" },
+            urgent: { type: "boolean" },
+            blood_analysis: { type: "boolean" },
+            biochemical_analysis: { type: "boolean" },
+            sickname: { type: "string" },
+            view: { type: "boolean" },
+            day: { type: "string" },
+            month: { type: "string" },
+            queueNumber: { type: "number" },
+            retsept: {
+              type: "object",
+              properties: {
+                writed_at: { type: "string" },
+                writed_doctor: { type: "string" },
+                patientStatus: { type: "string" },
+                sickname: { type: "string" },
+                retseptList: { type: "string" },
+              },
             },
-            payForRoom: {
-              type: "number",
-            },
-            roomNumber: {
-              type: "number",
-            },
-            outDay: {
-              type: "string",
+            room: {
+              type: "object",
+              properties: {
+                dayOfTreatment: { type: "number" },
+                payForRoom: { type: "number" },
+                roomNumber: { type: "number" },
+                outDay: { type: "number" },
+              },
             },
           },
         },
@@ -126,11 +60,15 @@ class clientValidation {
         "firstname",
         "lastname",
         "phone",
+<<<<<<< HEAD
         "choseDoctor",
         "payState",
         "paySumm",
         "doctorFirstName",
         "doctorLastName",
+=======
+        "idNumber",
+>>>>>>> 5abcd169f41993eaa80e0f3e14f68a1c56dda83d
         "address",
         "year",
       ],

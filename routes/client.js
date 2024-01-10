@@ -8,14 +8,19 @@ const {
   searchClient,
   updateClient,
   cleareClient,
+  getByIdnumber,
 } = require("../controllers/client");
-const clientValidation = require("../Validation/client.Validation");
+
+const clientValidation = require("../Validation/client.validation");
 
 // GET ALL CLIENT
 router.get("/all", getAllClient);
 
 // GET ONE (1) CLIENT
 router.get("/:_id", getOneClient);
+
+// GET ONE (1) CLIENT By ID_NUMBER
+router.get("/getIdNumber/:id", getByIdnumber);
 
 // CRATE CLIENT || NEW CLIENT
 router.post("/", [clientValidation.add], newClient);

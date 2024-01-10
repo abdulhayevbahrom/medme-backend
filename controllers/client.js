@@ -4,7 +4,7 @@ const schedule = require("node-schedule");
 // GET ALL CLIENT
 const getAllClient = async (req, res) => {
   try {
-    const allData = await ClientModel.find()
+    const allData = await ClientModel.find();
 
     if (!allData.length) {
       return res.json({
@@ -29,7 +29,6 @@ const getAllClient = async (req, res) => {
   }
 };
 
-
 // GET ONE (1) CLIENT
 const getOneClient = async (req, res) => {
   try {
@@ -53,6 +52,29 @@ const getOneClient = async (req, res) => {
   }
 };
 
+// GET ONE (1) CLIENT BY ID_NUMBER
+const getByIdnumber = async (req, res) => {
+  try {
+    let client = await ClientModel.findOne({ idNumber: req.params.id });
+    if (!client) {
+      return res.status(404).json({
+        success: false,
+        message: "Bunday bemor topilmadi",
+        data: null,
+      });
+    }
+    res.json({
+      success: true,
+      message: "Bemor topildi",
+      data: client,
+    });
+  } catch {
+    res
+      .status(500)
+      .json({ state: false, msg: "Server error", innerData: null });
+  }
+};
+
 // CRATE CLIENT || NEW CLIENT
 let time = new Date();
 let todaysTime =
@@ -60,18 +82,31 @@ let todaysTime =
 
 const newClient = async (req, res) => {
   try {
-    let client = req.body;
-    console.log(client);
+    let client = req?.body;
+    let idNumber = client?.idNumber;
+
+    let exactClient = await ClientModel.findOne({ idNumber: idNumber });
+
     const unActiveClients = await ClientModel.find({
-      choseDoctor: client.choseDoctor,
+      choseDoctor: client.stories.choseDoctor,
       day: todaysTime,
     });
 
-    const createProduct = new ClientModel({
-      ...req.body,
-      queueNumber: unActiveClients.length + 1,
-    });
+    // exactClient.stories.queueNumber = unActiveClients?.length + 1;
+    // client.stories.queueNumber = unActiveClients?.length + 1;
 
+    if (exactClient) {
+      exactClient.stories = [...exactClient.stories, client.stories];
+      exactClient.stories.queueNumber = unActiveClients?.length + 1;
+
+      let updated = await ClientModel.findByIdAndUpdate(
+        exactClient._id,
+        exactClient
+      );
+      return res.send(updated);
+    }
+
+    const createProduct = await ClientModel.create(client);
     if (!createProduct) {
       return res.status(400).json({
         success: false,
@@ -79,8 +114,8 @@ const newClient = async (req, res) => {
         data: createProduct,
       });
     }
-
     const saveProduct = await createProduct.save();
+
     res.status(200).json({
       success: true,
       message: "client saved",
@@ -160,29 +195,6 @@ schedule.scheduleJob("0 0 0 * * *", async () => {
   }
 });
 
-// const autoDelete = async (props) => {
-
-// const allData = await ClientModel.find();
-// const inactivityPeriod = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-// const currentTime = new Date().getTime();
-
-// allData?.forEach((user) => {
-//   if (currentTime - user.queueNumber > inactivityPeriod) {
-//     user.payState = false;
-//     user.paySumm = 0;
-//   }
-// });
-// };
-// setInterval(autoDelete, 60 * 60 * 1000); // Run every hour
-
-
-
-
-
-
-
-
-
 module.exports = {
   getAllClient,
   getOneClient,
@@ -191,4 +203,5 @@ module.exports = {
   updateClient,
   searchClient,
   cleareClient,
+  getByIdnumber,
 };
