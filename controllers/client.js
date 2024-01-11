@@ -87,23 +87,28 @@ const newClient = async (req, res) => {
 
     let exactClient = await ClientModel.findOne({ idNumber: idNumber });
 
-    const unActiveClients = await ClientModel.find({
-      choseDoctor: client.stories.choseDoctor,
-      day: todaysTime,
-    });
+    const unActiveClients = await ClientModel.find();
+    let aaa = unActiveClients.filter(
+      (el) =>
+        el.stories[0].choseDoctor === client.stories.choseDoctor &&
+        el.stories[0].day === todaysTime
+    );
 
-    // exactClient.stories.queueNumber = unActiveClients?.length + 1;
-    // client.stories.queueNumber = unActiveClients?.length + 1;
+    client.stories.queueNumber = aaa?.length + 1;
 
     if (exactClient) {
-      exactClient.stories = [...exactClient.stories, client.stories];
-      exactClient.stories.queueNumber = unActiveClients?.length + 1;
+      exactClient.stories = [client.stories, ...exactClient.stories];
+      exactClient.stories.queueNumber = aaa?.length + 1;
 
       let updated = await ClientModel.findByIdAndUpdate(
         exactClient._id,
         exactClient
       );
-      return res.send(updated);
+      return res.status(200).json({
+        success: true,
+        message: "client saved",
+        data: updated,
+      });
     }
 
     const createProduct = await ClientModel.create(client);
