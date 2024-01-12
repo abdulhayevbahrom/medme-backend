@@ -29,7 +29,7 @@ router.post("/", [clientValidation.add], newClient);
 router.delete("/remove/:_id", deleteClient);
 
 // UPDATE CLIENT
-router.put("/:_id", [clientValidation.add], updateClient);
+router.put("/:_id", updateClient);
 
 // SEARCH CLIENT
 router.post("/search", searchClient);
