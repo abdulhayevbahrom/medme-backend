@@ -149,8 +149,10 @@ const updateClient = async (req, res) => {
       req.body
     );
     res.json({ success: true, message: "updated", data: updatedClient });
-  } catch {
-    res.json("something went wrong");
+  } catch (err) {
+    res
+      .status(500)
+      .json({ success: false, message: "server error", data: null });
   }
 };
 
