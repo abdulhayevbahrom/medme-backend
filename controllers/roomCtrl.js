@@ -124,18 +124,14 @@ const deleteUserFromRoom = async (req, res) => {
     // ID bo'yicha foydalanuvchini izlash
     const client = await ClientModel.findOne({ _id: clientRoom.id });
 
+    client.stories[0].room = {
+      dayOfTreatment: clientRoom.dayOfTreatment,
+      payForRoom: clientRoom.payForRoom,
+      outDay: clientRoom?.outDay,
+    };
+
     // Foydalanuvchi xonasini malumotlarini yangilash
-    await ClientModel.findByIdAndUpdate(
-      client._id,
-      {
-        room: {
-          dayOfTreatment: clientRoom.dayOfTreatment,
-          payForRoom: clientRoom.payForRoom,
-          outDate: clientRoom.outDay,
-        },
-      },
-      { new: true } // Yangilangan hujjatni qaytarish
-    );
+    await ClientModel.findByIdAndUpdate(client._id, client, { new: true });
 
     let room = await roomModel.findById(roomID);
     let capacity = room.capacity;
@@ -151,23 +147,7 @@ const deleteUserFromRoom = async (req, res) => {
       message: "Bemor xonadan o'chirildi",
       data: updatedRoom,
     });
-
-    // // // Xona miqdorini yangilash (bu qismni izohlang va o'zingizning ma'lumot tuzumiga qarab tugatib bering)
-    // // const room = await roomModel.findById(roomID);
-    // // const capacity = room.capacity;
-    // // const removeFromCapacity = capacity.filter((i) => i.phone !== clientID);
-    // // room.capacity = removeFromCapacity;
-    // // const updatedRoom = await roomModel.findByIdAndUpdate(roomID, room);
-
-    // res.send({
-    //   success: true,
-    //   message: "Bemor xonadan o'chirildi",
-    //   data: updatedClient, // Yangilangan foydalanuvchi ma'lumotlarini qaytarish
-    //   // Agar yangilangan xona ma'lumotlarini ham qaytarishni istasangiz quyidagi qatorni uncomment qiling
-    //   // roomData: updatedRoom,
-    // });
   } catch (error) {
-    console.error(error);
     res.status(500).send({
       success: false,
       message: "Foydalanuvchini xonadan o'chirishda xatolik",

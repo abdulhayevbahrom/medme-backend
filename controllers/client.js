@@ -152,7 +152,7 @@ const updateClient = async (req, res) => {
   } catch (err) {
     res
       .status(500)
-      .json({ success: false, message: "server error", data: null });
+      .json({ success: false, message: "server error", err, data: null });
   }
 };
 
