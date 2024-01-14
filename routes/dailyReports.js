@@ -4,7 +4,9 @@ const ClientModel = require("../models/clientModel");
 const doctorModel = require("../models/doctorModel");
 
 dailyReports.get("/doctorsMoney", async (req, res) => {
-  let users = await ClientModel.find({ view: true });
+  let allUsers = await ClientModel.find();
+
+  let users = allUsers.filter((user) => user?.stories[0].view === true);
   let doctors = await doctorModel.find({ docORrecep: "doctor" });
   let time = new Date();
   let day =
@@ -17,14 +19,14 @@ dailyReports.get("/doctorsMoney", async (req, res) => {
   for (let i = 0; i < doctors.length; i++) {
     const doctor = doctors[i];
     const filteredUsers = users.filter(
-      (user) => user.choseDoctor === doctor.specialization
+      (user) => user?.stories[0]?.choseDoctor === doctor.specialization
     );
     doctorDailyMoney[doctor.specialization] = filteredUsers
-      .filter((u) => u.day === day)
-      .reduce((a, b) => a + b.paySumm, 0);
+      .filter((u) => u?.stories[0]?.day === day)
+      .reduce((a, b) => a + b?.stories[0]?.paySumm, 0);
 
     todaysClient[doctor.specialization] = filteredUsers.filter(
-      (u) => u.day === day
+      (u) => u?.stories[0]?.day === day
     ).length;
 
     // percent kodi oxshamagan
@@ -35,7 +37,6 @@ dailyReports.get("/doctorsMoney", async (req, res) => {
     // const doctorPercent = +doctor.percent || 0;
     // percent[doctor.specialization] = (totalPay * doctorPercent) / 100;
   }
-
   res.status(200).json({
     state: true,
     message: "kunlik tushumlar",

@@ -26,6 +26,7 @@ const clientSchema = new Schema({
         type: String,
         required: [true, "lastname is required"],
       },
+      doctorIdNumber: { type: String },
       doctorPhone: { type: String },
       temperature: { type: String },
       weight: { type: Number },

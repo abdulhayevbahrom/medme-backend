@@ -5,7 +5,7 @@ class adminValidation {
     const schema = {
       type: "object",
       properties: {
-        userId: {
+        idNumber: {
           type: "string",
         },
         firstName: {

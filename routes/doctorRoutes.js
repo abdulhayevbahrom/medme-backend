@@ -4,10 +4,12 @@ const {
   registerController,
   getAllDocotrsController,
   deleteDoctor,
-  updateDoctor
+  updateDoctor,
 } = require("../controllers/doctorCtrl");
 // const authMiddleware = require("../middlewares/authMiddleware");
-const adminValidation = require('../Validation/admin.validation')
+const adminValidation = require("../Validation/admin.validation");
+
+const { createReport } = require("../controllers/reports");
 
 //router onject
 const router = express.Router();
@@ -17,19 +19,18 @@ const router = express.Router();
 router.post("/login", loginController);
 
 //REGISTER || POST
-router.post("/register", [adminValidation.add], registerController);
-
+router.post("/register", [adminValidation.add], (req, res) => {
+  createReport(req, res), registerController(req, res);
+});
 
 //GET ALL DOC
 router.get("/getAllDoctors", getAllDocotrsController);
 
 // DELETE DOCTOR
-router.delete('/delete/:_id', deleteDoctor)
-
+router.delete("/delete/:_id", deleteDoctor);
 
 // update doctor
-router.put('/update/:_id', updateDoctor)
-
+router.put("/update/:_id", updateDoctor);
 
 //APply Doctor || POST
 // router.post("/apply-doctor", authMiddleware, applyDoctorController);
@@ -46,8 +47,6 @@ router.put('/update/:_id', updateDoctor)
 //   authMiddleware,
 //   deleteAllNotificationController
 // );
-
-
 
 //BOOK APPOINTMENT
 // router.post("/book-appointment", authMiddleware, bookeAppointmnetController);
