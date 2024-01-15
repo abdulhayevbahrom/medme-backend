@@ -28,7 +28,6 @@ const getReports = async (req, res) => {
 };
 
 // Create report
-
 const createReport = async (req, res) => {
   try {
     let {
@@ -43,7 +42,7 @@ const createReport = async (req, res) => {
 
     let info = {
       idNumber,
-      fullName: firstName + " " + lastName,
+      doctorFullName: firstName + " " + lastName,
       specialization,
       percent,
       salary,
@@ -69,7 +68,8 @@ const createReport = async (req, res) => {
   }
 };
 
-schedule.scheduleJob("0 * * * * *", async () => {
+// auto update
+schedule.scheduleJob("0 10 * * * *", async () => {
   try {
     let AllClients = await clientModel.find();
     let AllReports = await ReportsDB.find();
@@ -83,10 +83,23 @@ schedule.scheduleJob("0 * * * * *", async () => {
 
       reportItem.stories[0] = {
         day: today,
-        totalSumm: clients.reduce((a, b) => a + b.stories[0].paySumm, 0),
-        totalClient: 0,
-        doctorTP: 0,
+        totalSumm: clients
+          ?.filter((i) => i?.stories[0]?.doctorIdNumber === reportItem.idNumber)
+          ?.reduce((a, b) => a + b.stories[0].paySumm, 0),
+        totalClient: clients?.filter(
+          (i) => i?.stories[0]?.doctorIdNumber === reportItem.idNumber
+        )?.length,
+        doctorTP:
+          (clients
+            ?.filter(
+              (i) => i?.stories[0]?.doctorIdNumber === reportItem.idNumber
+            )
+            .reduce((a, b) => a + b.stories[0].paySumm, 0) *
+            reportItem.percent) /
+          100,
       };
+
+      await ReportsDB.findByIdAndUpdate(reportItem._id, reportItem);
     }
   } catch (error) {
     console.error("Xatolik:", error);
