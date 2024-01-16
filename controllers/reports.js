@@ -69,7 +69,7 @@ const createReport = async (req, res) => {
 };
 
 // auto update
-schedule.scheduleJob("0 10 * * * *", async () => {
+schedule.scheduleJob("*/10 * * * *", async () => {
   try {
     let AllClients = await clientModel.find();
     let AllReports = await ReportsDB.find();
