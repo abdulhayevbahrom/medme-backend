@@ -38,12 +38,14 @@ const createReport = async (req, res) => {
       percent,
       salary,
       analisisPrices,
+      feesPerCunsaltation,
     } = req.body;
 
     let info = {
       idNumber,
       doctorFullName: firstName + " " + lastName,
       specialization,
+      feesPerCunsaltation,
       percent,
       salary,
       analisisPrices,
@@ -69,7 +71,7 @@ const createReport = async (req, res) => {
 };
 
 // auto update
-schedule.scheduleJob("*/10 * * * *", async () => {
+schedule.scheduleJob("0 10 * * * *", async () => {
   try {
     let AllClients = await clientModel.find();
     let AllReports = await ReportsDB.find();
@@ -81,7 +83,7 @@ schedule.scheduleJob("*/10 * * * *", async () => {
     for (let i = 0; i < AllReports.length; i++) {
       let reportItem = AllReports[i];
 
-      reportItem.stories[0] = {
+      let item = {
         day: today,
         totalSumm: clients
           ?.filter((i) => i?.stories[0]?.doctorIdNumber === reportItem.idNumber)
@@ -99,10 +101,16 @@ schedule.scheduleJob("*/10 * * * *", async () => {
           100,
       };
 
+      reportItem?.stories[0]?.day === today
+        ? ((reportItem.stories[0] = item),
+          await ReportsDB.findByIdAndUpdate(reportItem._id, reportItem))
+        : reportItem.stories.unshift(item);
       await ReportsDB.findByIdAndUpdate(reportItem._id, reportItem);
     }
+    console.log("ok");
   } catch (error) {
     console.error("Xatolik:", error);
   }
 });
+
 module.exports = { getReports, createReport };
