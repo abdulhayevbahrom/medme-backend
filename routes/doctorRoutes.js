@@ -20,8 +20,10 @@ router.post("/login", loginController);
 
 //REGISTER || POST
 router.post("/register", [adminValidation.add], (req, res) => {
-  createReport(req, res), registerController(req, res);
-});
+  createReport(req, res),
+    registerController(req, res)
+}
+);
 
 //GET ALL DOC
 router.get("/getAllDoctors", getAllDocotrsController);

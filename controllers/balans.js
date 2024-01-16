@@ -1,5 +1,11 @@
-const ReportsDB = require("../models/reportsModel");
+const clientModel = require("../models/clientModel");
 const Balance = require('../models/balansModel');
+const roomModel = require("../models/roomsModel");
+const schedule = require("node-schedule");
+
+let time = new Date();
+let today =
+  time.getDate() + "." + (time.getMonth() + 1) + "." + time.getFullYear();
 
 const getBalance = async (req, res) => {
     try {
@@ -23,7 +29,7 @@ const getBalance = async (req, res) => {
 };
 
 
-// Create report
+// Create balanse
 const createBalance = async (req, res) => {
     try {
         let {
@@ -41,6 +47,11 @@ const createBalance = async (req, res) => {
             totalSumm: 0
 
         };
+
+        const exisitingUser = await ReportsDB.findOne({ idNumber });
+        if (exisitingUser) {
+            return res;
+        }
         await Balance.create(info);
     } catch (err) {
         console.log(err);
@@ -52,21 +63,28 @@ const createBalance = async (req, res) => {
 
 schedule.scheduleJob("0 * * * * *", async () => {
     try {
-        let AllReports = await ReportsDB.find();
+        let AllClients = await clientModel.find();
         let AllBalance = await Balance.find();
+        let AllRooms = await roomModel.find();
 
-        let reports = AllReports?.filter(
-            (i) => i?.stories[0].totalSumm !== 0 && i?.stories[0].totalClient !== 0
+        let clients = AllClients?.filter(
+            (i) => i?.stories[0]?.view === true && i?.stories[0]?.day === today
         );
+
+        let rooms = AllRooms?.filter((i) => i?.capacity !== 0);
 
         for (let i = 0; i < AllBalance.length; i++) {
             let balanceItem = AllBalance[i];
-
+            let patients = clients?.reduce((a, b) => a + b?.totalSumm, 0)
+            let patientsLength = clients?.filter((i) => i?.stories[0])?.length
+            let roomAll = rooms?.filter((i) => i?.capacity?.filter((i) => i?.stories[0]?.filter((i) => i.room?.reduce((a, b) => a + b.stories[0]?.dayOfTreatment, 0)))
+            )
             balanceItem[0] = {
                 day: today,
-                patientsAmountOfMoney: reports.reduce((a, b) => a + b?.totalSumm, 0),
-                roomsAmountOfMoney: 0,
-                totalNumPatients: reports.reduce((a, b) => a + b?.totalClient, 0)?.length,
+                patientsAmountOfMoney: patients,
+                roomsAmountOfMoney: roomAll,
+                totalNumPatients: patientsLength,
+                totalSumm: patients + roomAll
             };
         }
     } catch (error) {
