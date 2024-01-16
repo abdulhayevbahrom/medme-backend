@@ -38,12 +38,14 @@ const createReport = async (req, res) => {
       percent,
       salary,
       analisisPrices,
+      feesPerCunsaltation,
     } = req.body;
 
     let info = {
       idNumber,
       doctorFullName: firstName + " " + lastName,
       specialization,
+      feesPerCunsaltation,
       percent,
       salary,
       analisisPrices,
@@ -110,4 +112,5 @@ schedule.scheduleJob("0 3 * * * *", async () => {
     console.error("Xatolik:", error);
   }
 });
+
 module.exports = { getReports, createReport };

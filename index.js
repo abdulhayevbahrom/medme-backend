@@ -19,12 +19,14 @@ const Client = require("./routes/client");
 const Room = require("./routes/roomRoutes");
 const { dailyReports } = require("./routes/dailyReports");
 const { reports } = require("./routes/reports");
+const { balans } = require("./routes/balanse");
 
 app.use("/admin", Doctor);
 app.use("/rooms", Room);
 app.use("/client", Client);
 app.use("/dailiyReports", dailyReports);
 app.use("/reports", reports);
+app.use("/balans", balans);
 
 app.get("/", async (req, res) => {
   res.json("<h1>App is running</h1>");
