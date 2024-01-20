@@ -1,4 +1,3 @@
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const doctorModel = require("../models/doctorModel");
 
@@ -35,34 +34,28 @@ const loginController = async (req, res) => {
   try {
     const { login, password } = req.body;
     if (!login || !password) {
-      return res
-        .status(403)
-        .json({
-          state: false,
-          msg: "Username or password is empty",
-          innerData: null,
-        });
+      return res.status(403).json({
+        state: false,
+        msg: "Username or password is empty",
+        innerData: null,
+      });
     }
 
     const exactAdmin = await doctorModel.findOne({ login }); // => {username : username}
     if (!exactAdmin) {
-      return res
-        .status(400)
-        .json({
-          state: false,
-          msg: "Username or password is incorrect",
-          innerData: null,
-        });
+      return res.status(400).json({
+        state: false,
+        msg: "Username or password is incorrect",
+        innerData: null,
+      });
     }
 
     if (exactAdmin.password !== password) {
-      return res
-        .status(400)
-        .json({
-          state: false,
-          msg: "Username or password is incorrect",
-          innerData: null,
-        });
+      return res.status(400).json({
+        state: false,
+        msg: "Username or password is incorrect",
+        innerData: null,
+      });
     }
 
     const token = jwt.sign({ id: exactAdmin._id }, process.env.JWT_SECRET);

@@ -6,7 +6,7 @@ let time = new Date();
 let today =
   time.getDate() + "." + (time.getMonth() + 1) + "." + time.getFullYear();
 
-let month = time.toLocaleString("default", { month: "long" });
+let month = time.toLocaleString("en-US", { month: "long" });
 
 const getBalance = async (req, res) => {
   try {
@@ -58,7 +58,7 @@ const createBalance = async (req, res) => {
   }
 };
 
-schedule.scheduleJob("*/5 * * * * *", async () => {
+schedule.scheduleJob("* */40 * * * *", async () => {
   try {
     let AllClients = await clientModel.find();
     let AllBalance = await Balance.find();
@@ -85,18 +85,42 @@ schedule.scheduleJob("*/5 * * * * *", async () => {
 
       return await Balance.findByIdAndUpdate(balanceItem?._id, balanceItem);
     } else {
-      balanceItem.day = today;
-      balanceItem.month = month;
-      balanceItem.patientsAmountOfMoney = patients;
-      balanceItem.roomsAmountOfMoney = roomAll;
-      balanceItem.totalNumPatients = patientsLength;
-      balanceItem.totalSumm = patients + roomAll;
+      let newBalans = {
+        day: today,
+        month,
+        patientsAmountOfMoney: patients,
+        roomsAmountOfMoney: roomAll,
+        totalNumPatients: patientsLength,
+        totalSumm: patients + roomAll,
+      };
 
-      await Balance.create(balanceItem);
+      let newB = await Balance.create(newBalans);
+      await newB.save();
     }
   } catch (error) {
     console.error("Xatolik:", error);
   }
 });
 
-module.exports = { getBalance, createBalance };
+// delete balans
+const deleteBalans = async (req, res) => {
+  try {
+    let id = req.params.id;
+    let deletedBalans = await Balance.findByIdAndDelete(id);
+    res.send(deletedBalans);
+  } catch (error) {
+    console.error("Xatolik:", error);
+  }
+};
+
+// shart boyicha ochiradi
+const deleteMany = async (req, res) => {
+  try {
+    let deletedBalans = await Balance.deleteMany({ day: null });
+    res.send(deletedBalans);
+  } catch (error) {
+    console.error("Xatolik:", error);
+  }
+};
+
+module.exports = { getBalance, deleteBalans, deleteMany };

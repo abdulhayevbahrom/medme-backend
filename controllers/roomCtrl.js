@@ -146,6 +146,7 @@ const deleteUserFromRoom = async (req, res) => {
       success: true,
       message: "Bemor xonadan o'chirildi",
       data: updatedRoom,
+      client,
     });
   } catch (error) {
     res.status(500).send({
