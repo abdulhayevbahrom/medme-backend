@@ -71,7 +71,12 @@ const createReport = async (req, res) => {
 };
 
 // auto update
+<<<<<<< HEAD
 schedule.scheduleJob("*/10 * * * *", async () => {
+=======
+// schedule.scheduleJob("0 3 * * * *", async () => {
+schedule.scheduleJob("*/10 * * * * *", async () => {
+>>>>>>> 972ed9ce2f4ae17896d70b9c91c7ee3e1b64d06c
   try {
     let AllClients = await clientModel.find();
     let AllReports = await ReportsDB.find();
@@ -85,18 +90,25 @@ schedule.scheduleJob("*/10 * * * *", async () => {
 
       let item = {
         day: today,
-        totalSumm: clients
-          ?.filter((i) => i?.stories[0]?.doctorIdNumber === reportItem.idNumber)
-          ?.reduce((a, b) => a + b.stories[0].paySumm, 0),
+
+        // totalSumm: clients
+        //   ?.filter((i) => i?.stories[0]?.doctorIdNumber === reportItem.idNumber)
+        //   ?.reduce((a, b) => a + b.stories[0].paySumm, 0),
+
+        totalSumm:
+          clients?.filter(
+            (i) => i?.stories[0]?.doctorIdNumber === reportItem.idNumber
+          ).length * reportItem.feesPerCunsaltation,
+
         totalClient: clients?.filter(
           (i) => i?.stories[0]?.doctorIdNumber === reportItem.idNumber
         )?.length,
+
         doctorTP:
-          (clients
-            ?.filter(
-              (i) => i?.stories[0]?.doctorIdNumber === reportItem.idNumber
-            )
-            .reduce((a, b) => a + b.stories[0].paySumm, 0) *
+          (clients?.filter(
+            (i) => i?.stories[0]?.doctorIdNumber === reportItem.idNumber
+          ).length *
+            reportItem.feesPerCunsaltation *
             reportItem.percent) /
           100,
       };
@@ -107,7 +119,6 @@ schedule.scheduleJob("*/10 * * * *", async () => {
         : reportItem.stories.unshift(item);
       await ReportsDB.findByIdAndUpdate(reportItem._id, reportItem);
     }
-    console.log("ok");
   } catch (error) {
     console.error("Xatolik:", error);
   }

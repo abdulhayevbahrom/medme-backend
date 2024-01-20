@@ -1,6 +1,5 @@
 const clientModel = require("../models/clientModel");
 const Balance = require("../models/balansModel");
-const roomModel = require("../models/roomsModel");
 const schedule = require("node-schedule");
 
 let time = new Date();
@@ -60,54 +59,49 @@ const createBalance = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
 schedule.scheduleJob("*/1 * * * *", async () => {
+=======
+schedule.scheduleJob("*/5 * * * * *", async () => {
+>>>>>>> 972ed9ce2f4ae17896d70b9c91c7ee3e1b64d06c
   try {
     let AllClients = await clientModel.find();
     let AllBalance = await Balance.find();
-    let AllRooms = await roomModel.find();
 
     let clients = AllClients?.filter(
       (i) => i?.stories[0]?.view === true && i?.stories[0]?.day === today
     );
 
-    let rooms = AllRooms?.filter((i) => i?.capacity !== 0);
-
     let balanceItem = AllBalance[AllBalance.length - 1];
 
-    let patients = clients?.reduce((a, b) => a + b?.stories[0]?.totalSumm, 0);
+    let patients = clients?.reduce((a, b) => a + b?.stories[0]?.paySumm, 0);
     let patientsLength = clients?.length;
-    let roomAll = rooms?.filter((i) =>
-      i?.capacity?.reduce((a, b) => a + b?.stories[0]?.room?.dayOfTreatment, 0)
-    );
+    let roomAll = AllClients.filter(
+      (client) => client?.stories[0]?.room?.outDay === today
+    ).reduce((a, b) => a + b?.stories[0]?.room?.dayOfTreatment, 0);
 
-    // console.log(patients);
+    if (balanceItem?.day === today) {
+      balanceItem.day = today;
+      balanceItem.month = month;
+      balanceItem.patientsAmountOfMoney = patients;
+      balanceItem.roomsAmountOfMoney = roomAll;
+      balanceItem.totalNumPatients = patientsLength;
+      balanceItem.totalSumm = patients + roomAll;
 
-    // if (balanceItem?.day === today) {
-    //   balanceItem = {
-    //     day: today,
-    //     month,
-    //     patientsAmountOfMoney: patients,
-    //     roomsAmountOfMoney: roomAll,
-    //     totalNumPatients: patientsLength,
-    //     totalSumm: patients + roomAll,
-    //   };
-    //   return await Balance.findByIdAndUpdate(balanceItem?._id, balanceItem);
-    // } else {
-    //   balanceItem = {
-    //     day: today,
-    //     month,
-    //     patientsAmountOfMoney: patients,
-    //     roomsAmountOfMoney: roomAll,
-    //     totalNumPatients: patientsLength,
-    //     totalSumm: patients + roomAll,
-    //   };
+      return await Balance.findByIdAndUpdate(balanceItem?._id, balanceItem);
+    } else {
+      balanceItem.day = today;
+      balanceItem.month = month;
+      balanceItem.patientsAmountOfMoney = patients;
+      balanceItem.roomsAmountOfMoney = roomAll;
+      balanceItem.totalNumPatients = patientsLength;
+      balanceItem.totalSumm = patients + roomAll;
 
-    //   await Balance.create(balanceItem);
-    // }
-
-    // }
+      await Balance.create(balanceItem);
+    }
   } catch (error) {
     console.error("Xatolik:", error);
   }
 });
+
 module.exports = { getBalance, createBalance };
