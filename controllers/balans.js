@@ -6,6 +6,7 @@ const schedule = require("node-schedule");
 let time = new Date();
 let today =
   time.getDate() + "." + (time.getMonth() + 1) + "." + time.getFullYear();
+  
 
 let month = time.toLocaleString("default", { month: "long" });
 
@@ -59,7 +60,7 @@ const createBalance = async (req, res) => {
   }
 };
 
-schedule.scheduleJob("0 * * * * *", async () => {
+schedule.scheduleJob("*/1 * * * *", async () => {
   try {
     let AllClients = await clientModel.find();
     let AllBalance = await Balance.find();
