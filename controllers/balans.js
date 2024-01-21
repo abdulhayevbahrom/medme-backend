@@ -29,40 +29,10 @@ const getBalance = async (req, res) => {
   }
 };
 
-// Create balanse
-const createBalance = async (req, res) => {
-  try {
-    let {
-      patientsAmountOfMoney,
-      roomsAmountOfMoney,
-      totalNumPatients,
-      totalSumm,
-    } = req.body;
-
-    let info = {
-      day: today,
-      patientsAmountOfMoney: 0,
-      roomsAmountOfMoney: 0,
-      totalNumPatients: 0,
-      totalSumm: 0,
-    };
-
-    const exisitingUser = await ReportsDB.findOne({ idNumber });
-    if (exisitingUser) {
-      return res;
-    }
-    await Balance.create(info);
-  } catch (err) {
-    console.log(err);
-    res.json({ success: false, message: "Server error", err, data: null });
-  }
-};
-
 schedule.scheduleJob("* */40 * * * *", async () => {
   try {
     let AllClients = await clientModel.find();
     let AllBalance = await Balance.find();
-
     let clients = AllClients?.filter(
       (i) => i?.stories[0]?.view === true && i?.stories[0]?.day === today
     );
@@ -95,7 +65,7 @@ schedule.scheduleJob("* */40 * * * *", async () => {
       };
 
       let newB = await Balance.create(newBalans);
-      await newB.save();
+      return await newB.save();
     }
   } catch (error) {
     console.error("Xatolik:", error);
@@ -116,7 +86,7 @@ const deleteBalans = async (req, res) => {
 // shart boyicha ochiradi
 const deleteMany = async (req, res) => {
   try {
-    let deletedBalans = await Balance.deleteMany({ day: null });
+    let deletedBalans = await Balance.deleteMany();
     res.send(deletedBalans);
   } catch (error) {
     console.error("Xatolik:", error);

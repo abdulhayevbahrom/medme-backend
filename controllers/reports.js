@@ -126,7 +126,7 @@ const deleteDoctorInReport = async (req, res) => {
   try {
     let findDoctor = await doctorModel.findOne({ _id: req.params._id });
     let result = await ReportsDB.deleteOne({
-      idNumber: findDoctor.idNumber,
+      idNumber: findDoctor?.idNumber,
     });
     console.log(result);
     // res.status(200).json({
@@ -140,4 +140,14 @@ const deleteDoctorInReport = async (req, res) => {
   }
 };
 
-module.exports = { getReports, createReport, deleteDoctorInReport };
+// shart boyicha ochiradi
+const deleteMany = async (req, res) => {
+  try {
+    let clear = await ReportsDB.deleteMany();
+    res.send(clear);
+  } catch (error) {
+    console.error("Xatolik:", error);
+  }
+};
+
+module.exports = { getReports, createReport, deleteDoctorInReport, deleteMany };

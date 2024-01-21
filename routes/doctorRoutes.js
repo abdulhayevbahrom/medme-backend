@@ -32,8 +32,7 @@ router.get("/getAllDoctors", getAllDocotrsController);
 // DELETE DOCTOR
 // router.delete("/delete/:_id", deleteDoctor);
 router.delete("/delete/:_id", (req, res) => {
-  // deleteDoctor(req, res),
-  deleteDoctorInReport(req, res);
+  deleteDoctor(req, res), deleteDoctorInReport(req, res);
 });
 
 // update doctor
