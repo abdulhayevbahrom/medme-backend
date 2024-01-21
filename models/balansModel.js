@@ -3,11 +3,11 @@ let time = new Date();
 let today =
   time.getDate() + "." + (time.getMonth() + 1) + "." + time.getFullYear();
 
-let dayMonth = time.toLocaleString("default", { month: "long" });
+let dayMonth = time.toLocaleString("en-US", { month: "long" });
 
 const balanceSchema = new Schema(
   {
-    day: { type: String, default: today },
+    day: { type: String },
     patientsAmountOfMoney: { type: Number, default: 0 },
     roomsAmountOfMoney: { type: Number, default: 0 },
     totalNumPatients: { type: Number, default: 0 },

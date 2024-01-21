@@ -1,6 +1,7 @@
 const ReportsDB = require("../models/reportsModel");
 const clientModel = require("../models/clientModel");
 const schedule = require("node-schedule");
+const doctorModel = require("../models/doctorModel");
 
 let time = new Date();
 let today =
@@ -72,7 +73,7 @@ const createReport = async (req, res) => {
 
 // auto update
 // schedule.scheduleJob("0 3 * * * *", async () => {
-schedule.scheduleJob("*/10 * * * * *", async () => {
+schedule.scheduleJob(" */40 * * * * *", async () => {
   try {
     let AllClients = await clientModel.find();
     let AllReports = await ReportsDB.find();
@@ -120,4 +121,33 @@ schedule.scheduleJob("*/10 * * * * *", async () => {
   }
 });
 
-module.exports = { getReports, createReport };
+// delete doctor in report
+const deleteDoctorInReport = async (req, res) => {
+  try {
+    let findDoctor = await doctorModel.findOne({ _id: req.params._id });
+    let result = await ReportsDB.deleteOne({
+      idNumber: findDoctor?.idNumber,
+    });
+    console.log(result);
+    // res.status(200).json({
+    //   success: true,}
+    //   message: "delete Doctor In Report",
+    //   innerData: result,
+    // });
+  } catch (err) {
+    console.log(err);
+    res.json({ success: false, message: "Server error", err, data: null });
+  }
+};
+
+// shart boyicha ochiradi
+const deleteMany = async (req, res) => {
+  try {
+    let clear = await ReportsDB.deleteMany();
+    res.send(clear);
+  } catch (error) {
+    console.error("Xatolik:", error);
+  }
+};
+
+module.exports = { getReports, createReport, deleteDoctorInReport, deleteMany };

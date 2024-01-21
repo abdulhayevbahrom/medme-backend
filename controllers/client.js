@@ -134,8 +134,19 @@ const newClient = async (req, res) => {
 // DELETE CLIENT
 const deleteClient = async (req, res) => {
   try {
-    let deletedClient = await ClientModel.findByIdAndDelete(req.params._id);
-    res.json({ success: true, message: "Deleted", data: deletedClient });
+    // let deletedClient = await ClientModel.findByIdAndDelete(req.params._id);
+    // res.json({ success: true, message: "Deleted", data: deletedClient });
+
+    let findClient = await ClientModel.findOne({ _id: req.params._id });
+
+    findClient.stories.shift();
+
+    let result = await ClientModel.findByIdAndUpdate(
+      findClient._id,
+      findClient
+    );
+
+    res.json({ success: true, message: "Deleted", data: result });
   } catch {
     res.json({ state: false, msg: "Server error", innerData: null });
   }

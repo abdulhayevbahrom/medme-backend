@@ -4,7 +4,7 @@ let time = new Date();
 let today =
   time.getDate() + "." + (time.getMonth() + 1) + "." + time.getFullYear();
 
-let dayMonth = time.toLocaleString("default", { month: "long" });
+let dayMonth = time.toLocaleString("en-US", { month: "long" });
 
 const schema = new Schema(
   {

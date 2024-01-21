@@ -6,7 +6,15 @@ require("colors");
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+// app.use(cors({ origin: ["http://localhost:3000", "https://www.medme.uz"] }));
+
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://www.medme.uz"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    credentials: true,
+  })
+);
 
 set("strictQuery", false);
 connect(process.env.MONGO_URL)

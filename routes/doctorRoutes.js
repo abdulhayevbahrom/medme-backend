@@ -9,7 +9,10 @@ const {
 // const authMiddleware = require("../middlewares/authMiddleware");
 const adminValidation = require("../Validation/admin.validation");
 
-const { createReport } = require("../controllers/reports");
+const {
+  createReport,
+  deleteDoctorInReport,
+} = require("../controllers/reports");
 
 //router onject
 const router = express.Router();
@@ -20,16 +23,17 @@ router.post("/login", loginController);
 
 //REGISTER || POST
 router.post("/register", [adminValidation.add], (req, res) => {
-  createReport(req, res),
-    registerController(req, res)
-}
-);
+  createReport(req, res), registerController(req, res);
+});
 
 //GET ALL DOC
 router.get("/getAllDoctors", getAllDocotrsController);
 
 // DELETE DOCTOR
-router.delete("/delete/:_id", deleteDoctor);
+// router.delete("/delete/:_id", deleteDoctor);
+router.delete("/delete/:_id", (req, res) => {
+  deleteDoctor(req, res), deleteDoctorInReport(req, res);
+});
 
 // update doctor
 router.put("/update/:_id", updateDoctor);

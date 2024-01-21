@@ -5,9 +5,8 @@ const schedule = require("node-schedule");
 let time = new Date();
 let today =
   time.getDate() + "." + (time.getMonth() + 1) + "." + time.getFullYear();
-  
 
-let month = time.toLocaleString("default", { month: "long" });
+let month = time.toLocaleString("en-US", { month: "long" });
 
 const getBalance = async (req, res) => {
   try {
@@ -30,40 +29,10 @@ const getBalance = async (req, res) => {
   }
 };
 
-// Create balanse
-const createBalance = async (req, res) => {
-  try {
-    let {
-      patientsAmountOfMoney,
-      roomsAmountOfMoney,
-      totalNumPatients,
-      totalSumm,
-    } = req.body;
-
-    let info = {
-      day: today,
-      patientsAmountOfMoney: 0,
-      roomsAmountOfMoney: 0,
-      totalNumPatients: 0,
-      totalSumm: 0,
-    };
-
-    const exisitingUser = await ReportsDB.findOne({ idNumber });
-    if (exisitingUser) {
-      return res;
-    }
-    await Balance.create(info);
-  } catch (err) {
-    console.log(err);
-    res.json({ success: false, message: "Server error", err, data: null });
-  }
-};
-
-schedule.scheduleJob("*/40 * * * * ", async () => {
+schedule.scheduleJob("* */40 * * * *", async () => {
   try {
     let AllClients = await clientModel.find();
     let AllBalance = await Balance.find();
-
     let clients = AllClients?.filter(
       (i) => i?.stories[0]?.view === true && i?.stories[0]?.day === today
     );
@@ -86,18 +55,42 @@ schedule.scheduleJob("*/40 * * * * ", async () => {
 
       return await Balance.findByIdAndUpdate(balanceItem?._id, balanceItem);
     } else {
-      balanceItem.day = today;
-      balanceItem.month = month;
-      balanceItem.patientsAmountOfMoney = patients;
-      balanceItem.roomsAmountOfMoney = roomAll;
-      balanceItem.totalNumPatients = patientsLength;
-      balanceItem.totalSumm = patients + roomAll;
+      let newBalans = {
+        day: today,
+        month,
+        patientsAmountOfMoney: patients,
+        roomsAmountOfMoney: roomAll,
+        totalNumPatients: patientsLength,
+        totalSumm: patients + roomAll,
+      };
 
-      await Balance.create(balanceItem);
+      let newB = await Balance.create(newBalans);
+      return await newB.save();
     }
   } catch (error) {
     console.error("Xatolik:", error);
   }
 });
 
-module.exports = { getBalance, createBalance };
+// delete balans
+const deleteBalans = async (req, res) => {
+  try {
+    let id = req.params.id;
+    let deletedBalans = await Balance.findByIdAndDelete(id);
+    res.send(deletedBalans);
+  } catch (error) {
+    console.error("Xatolik:", error);
+  }
+};
+
+// shart boyicha ochiradi
+const deleteMany = async (req, res) => {
+  try {
+    let deletedBalans = await Balance.deleteMany();
+    res.send(deletedBalans);
+  } catch (error) {
+    console.error("Xatolik:", error);
+  }
+};
+
+module.exports = { getBalance, deleteBalans, deleteMany };
