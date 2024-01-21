@@ -9,13 +9,14 @@ const clientSchema = new Schema({
   year: { type: String, required: [true, "doctor is required"] },
   stories: [
     {
+      doctorID: { type: String },
       choseDoctor: { type: String, required: [true, "doctor is required"] },
       payState: {
         type: Boolean,
         required: [true, "true or false value is required"],
       },
       secondary: {
-        type: Number,
+        type: Boolean,
       },
       paySumm: {
         type: Number,

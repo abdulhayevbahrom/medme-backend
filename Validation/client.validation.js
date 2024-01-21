@@ -14,9 +14,10 @@ class clientValidation {
         stories: {
           type: "object",
           properties: {
+            doctorID: { type: "string" },
             choseDoctor: { type: "string" },
             payState: { type: "boolean" },
-            secondary: { type: "number" },
+            secondary: { type: "boolean" },
             paySumm: { type: "number" },
             doctorIdNumber: { type: "string" },
             doctorFirstName: { type: "string" },

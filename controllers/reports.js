@@ -40,6 +40,7 @@ const createReport = async (req, res) => {
       salary,
       analisisPrices,
       feesPerCunsaltation,
+      secondPrice,
     } = req.body;
 
     let info = {
@@ -47,6 +48,7 @@ const createReport = async (req, res) => {
       doctorFullName: firstName + " " + lastName,
       specialization,
       feesPerCunsaltation,
+      secondPrice,
       percent,
       salary,
       analisisPrices,
@@ -73,7 +75,7 @@ const createReport = async (req, res) => {
 
 // auto update
 // schedule.scheduleJob("0 3 * * * *", async () => {
-schedule.scheduleJob(" */40 * * * * *", async () => {
+schedule.scheduleJob("*/40 * * * * *", async () => {
   try {
     let AllClients = await clientModel.find();
     let AllReports = await ReportsDB.find();
@@ -92,7 +94,9 @@ schedule.scheduleJob(" */40 * * * * *", async () => {
       let clientLength = doctorClients?.length;
 
       //birlamchi
-      let first = doctorClients.length * reportItem?.feesPerCunsaltation;
+      let first =
+        doctorClients.filter((i) => i.stories[0].secondary === false)?.length *
+        reportItem?.feesPerCunsaltation;
 
       // ikkilamchi
       let second =

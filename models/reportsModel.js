@@ -11,6 +11,7 @@ const schema = new Schema(
     idNumber: { type: String },
     doctorFullName: { type: String },
     specialization: { type: String },
+    secondPrice: { type: Number },
     feesPerCunsaltation: { type: Number },
     percent: { type: Number },
     salary: { type: Number },
