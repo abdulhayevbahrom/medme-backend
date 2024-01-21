@@ -84,30 +84,26 @@ schedule.scheduleJob(" */40 * * * * *", async () => {
 
     for (let i = 0; i < AllReports.length; i++) {
       let reportItem = AllReports[i];
+      // doctorning bugungi bemorlari
+      let doctorClients = clients?.filter(
+        (i) => i?.stories[0]?.doctorIdNumber === reportItem.idNumber
+      );
+      // doctor korgan clientlar soni
+      let clientLength = doctorClients?.length;
+
+      //birlamchi
+      let first = doctorClients.length * reportItem?.feesPerCunsaltation;
+
+      // ikkilamchi
+      let second =
+        doctorClients.filter((i) => i.stories[0].secondary === true)?.length *
+        reportItem.secondPrice;
 
       let item = {
         day: today,
-
-        // totalSumm: clients
-        //   ?.filter((i) => i?.stories[0]?.doctorIdNumber === reportItem.idNumber)
-        //   ?.reduce((a, b) => a + b.stories[0].paySumm, 0),
-
-        totalSumm:
-          clients?.filter(
-            (i) => i?.stories[0]?.doctorIdNumber === reportItem.idNumber
-          ).length * reportItem.feesPerCunsaltation,
-
-        totalClient: clients?.filter(
-          (i) => i?.stories[0]?.doctorIdNumber === reportItem.idNumber
-        )?.length,
-
-        doctorTP:
-          (clients?.filter(
-            (i) => i?.stories[0]?.doctorIdNumber === reportItem.idNumber
-          ).length *
-            reportItem.feesPerCunsaltation *
-            reportItem.percent) /
-          100,
+        totalSumm: first + second,
+        totalClient: clientLength,
+        doctorTP: ((first + second) * reportItem.percent) / 100,
       };
 
       reportItem?.stories[0]?.day === today

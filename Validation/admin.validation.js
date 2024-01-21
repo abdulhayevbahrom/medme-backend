@@ -41,6 +41,9 @@ class adminValidation {
         feesPerCunsaltation: {
           type: "number",
         },
+        secondPrice: {
+          type: "number",
+        },
         analisisPrices: {
           type: "object",
           properties: {

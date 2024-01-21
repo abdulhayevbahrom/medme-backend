@@ -16,6 +16,7 @@ class clientValidation {
           properties: {
             choseDoctor: { type: "string" },
             payState: { type: "boolean" },
+            secondary: { type: "number" },
             paySumm: { type: "number" },
             doctorIdNumber: { type: "string" },
             doctorFirstName: { type: "string" },

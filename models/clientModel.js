@@ -14,6 +14,9 @@ const clientSchema = new Schema({
         type: Boolean,
         required: [true, "true or false value is required"],
       },
+      secondary: {
+        type: Number,
+      },
       paySumm: {
         type: Number,
         required: [true, "default: 0 , before other summ"],

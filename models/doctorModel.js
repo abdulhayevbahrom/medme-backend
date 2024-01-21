@@ -36,6 +36,9 @@ const doctorSchema = new mongoose.Schema(
     feesPerCunsaltation: {
       type: Number,
     },
+    secondPrice: {
+      type: Number,
+    },
     analisisPrices: {
       blood_analysis: {
         type: Number,
