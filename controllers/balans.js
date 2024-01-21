@@ -59,11 +59,7 @@ const createBalance = async (req, res) => {
   }
 };
 
-<<<<<<< HEAD
-schedule.scheduleJob("*/1 * * * *", async () => {
-=======
-schedule.scheduleJob("*/5 * * * * *", async () => {
->>>>>>> 972ed9ce2f4ae17896d70b9c91c7ee3e1b64d06c
+schedule.scheduleJob("*/40 * * * * ", async () => {
   try {
     let AllClients = await clientModel.find();
     let AllBalance = await Balance.find();

@@ -71,12 +71,8 @@ const createReport = async (req, res) => {
 };
 
 // auto update
-<<<<<<< HEAD
-schedule.scheduleJob("*/10 * * * *", async () => {
-=======
 // schedule.scheduleJob("0 3 * * * *", async () => {
 schedule.scheduleJob("*/10 * * * * *", async () => {
->>>>>>> 972ed9ce2f4ae17896d70b9c91c7ee3e1b64d06c
   try {
     let AllClients = await clientModel.find();
     let AllReports = await ReportsDB.find();
