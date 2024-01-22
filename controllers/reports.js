@@ -83,12 +83,11 @@ schedule.scheduleJob("*/40 * * * * *", async () => {
     let clients = AllClients?.filter(
       (i) => i?.stories[0]?.view === true && i?.stories[0]?.day === today
     );
-
     for (let i = 0; i < AllReports.length; i++) {
       let reportItem = AllReports[i];
       // doctorning bugungi bemorlari
       let doctorClients = clients?.filter(
-        (i) => i?.stories[0]?.doctorIdNumber === reportItem.idNumber
+        (i) => i?.stories[0]?.doctorID === reportItem.idNumber
       );
       // doctor korgan clientlar soni
       let clientLength = doctorClients?.length;
